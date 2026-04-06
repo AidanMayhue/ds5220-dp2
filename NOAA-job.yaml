@@ -15,7 +15,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: noaa-tracker
-              image: ghcr.io/aidanmayhue/ds5220-noaa:latest
+              image: ghcr.io/aidanmayhue/ds5220-noaa:fixed
               imagePullPolicy: Always
               env:
                 - name: DYNAMODB_TABLE
