@@ -55,6 +55,7 @@ def fetch_water_level() -> dict:
         )
         resp.raise_for_status()
         data = resp.json()
+        print(f"DEBUG {product}: {data}")   # add this line
         if "error" in data:
             raise ValueError(f"NOAA API error for {product}: {data['error']['message']}")
         return float(data["data"][0]["v"])
