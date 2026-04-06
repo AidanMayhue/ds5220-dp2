@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: noaa-tracker
+  namespace: default
+spec:
+  schedule: "*/6 * * * *"        # runs every six minutes
+  concurrencyPolicy: Forbid    # skip a run if the previous one is still going
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: noaa-tracker
+              image: ghcr.io/AidanMayhue/ds5220-noaa:latest
+              imagePullPolicy: Always
+              env:
+                - name: DYNAMODB_TABLE
+                  value: "noaa-tracking"
+                - name: S3_BUCKET
+                  value: "your-bucket-name"
+                - name: AWS_REGION
+                  value: "us-east-1"
