@@ -55,10 +55,17 @@ def fetch_water_level() -> dict:
         )
         resp.raise_for_status()
         data = resp.json()
-        print(f"DEBUG {product}: {data}")   # add this line
+        print(f"DEBUG {product}: {data}")
+
         if "error" in data:
             raise ValueError(f"NOAA API error for {product}: {data['error']['message']}")
-        return float(data["data"][0]["v"])
+
+        key = "predictions" if product == "predictions" else "data"
+
+        if key not in data or not data[key]:
+            raise ValueError(f"Unexpected/empty NOAA response for {product}: {data}")
+
+        return float(data[key][0]["v"])
 
     observed  = _get("water_level")
     predicted = _get("predictions")
